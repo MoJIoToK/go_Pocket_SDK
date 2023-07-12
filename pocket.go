@@ -96,7 +96,7 @@ type Client struct {
 
 // newClient creates a new client instance with your app key (to generate key
 // visit https://getpocket.com/developer/apps/))
-func newClient(ConsumerKey string) (*Client, error) {
+func new_Client(ConsumerKey string) (*Client, error) {
 	if ConsumerKey == "" {
 		return nil, errors.New("Consumer key is empty")
 	}
