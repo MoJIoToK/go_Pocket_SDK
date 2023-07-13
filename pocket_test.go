@@ -16,7 +16,7 @@ func (s roundTripFunc) RoundTrip(r *http.Request) (*http.Response, error) {
 	return s(r)
 }
 
-func NewClient(t *testing.T, statusCode int, path, body string) *Client {
+func newClient(t *testing.T, statusCode int, path, body string) *Client {
 	return &Client{
 		client: &http.Client{
 			Transport: roundTripFunc(func(r *http.Request) (*http.Response, error) {
@@ -145,7 +145,7 @@ func TestClient_GetRequestToken(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			c := NewClient(t, tt.expectedStatusCode, "/v3/oauth/request", tt.expectedResponse)
+			c := newClient(t, tt.expectedStatusCode, "/v3/oauth/request", tt.expectedResponse)
 
 			got, err := c.GetRequestToken(tt.args.ctx, tt.args.redirectUrl)
 			if tt.wantErr {
@@ -217,7 +217,7 @@ func TestClient_Authorize(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			c := NewClient(t, tt.expectedStatusCode, "/v3/oauth/authorize", tt.expectedResponse)
+			c := newClient(t, tt.expectedStatusCode, "/v3/oauth/authorize", tt.expectedResponse)
 
 			got, err := c.Authorize(tt.args.ctx, tt.args.requestToken)
 			if tt.wantErr {
@@ -315,7 +315,7 @@ func TestClient_Add(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			c := NewClient(t, tt.expectedStatusCode, "/v3/add", "")
+			c := newClient(t, tt.expectedStatusCode, "/v3/add", "")
 
 			if err := c.Add(tt.args.ctx, tt.args.input); (err != nil) != tt.wantErr {
 				t.Errorf("Add() error = %v, wantErr %v", err, tt.wantErr)
